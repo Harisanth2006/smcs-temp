@@ -3,238 +3,108 @@ body {
     padding: 0;
     min-height: 100vh;
     font-family: "Poppins", sans-serif;
-    background:linear-gradient(to bottom, #7ec3f3, #6593f8);
+    background:linear-gradient(to bottom, #7ec3f3,#6593f8);
     background-image: url(enjoy\ Every\ Moment.png);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    overflow-x: hidden; /* Prevent horizontal scrolling */
 }
-
 .sidebar {
     position: fixed;
-    left: -280px; /* Slightly wider to ensure it's fully off-screen */
+    left: -240px;
     top: 0;
     height: 100%;
-    width: 280px; /* Slightly wider for touch targets */
-    background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+    width: 270px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+   /* background: 	#1e1e1e;*/
+    text-decoration-color: #111;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    box-shadow: 0px 0px 15px rgba(0,0,0,0.3);
-    padding-top: 60px; /* Space for toggle button */
+    box-shadow: 0px 0px 10px rgba(0,0,0,5);
+    padding-top: 20px;
     color: white;
-    transition: left 0.3s ease-in-out;
-    z-index: 10;
-    border-radius: 0 8px 8px 0; /* Only round the right corners */
+    transition: left 0.3s;
+    z-index: 1;
+    border-radius: 8px;
+    transition-timing-function: ease-in-out;
 }
-
 .sidebar a {
-    padding: 16px 20px; /* Larger touch targets */
+    padding: 15px;
     text-decoration: none;
-    color: #ffffff;
+    color:#ffffff;
     background: transparent;
     display: block;
-    font-size: 16px; /* Ensure readable text size on small screens */
-    margin: 4px 8px; /* Add margin between items */
-    border-radius: 8px;
-    transition: background-color 0.2s ease, transform 0.2s ease;
 }
-
-.sidebar a:hover,
-.sidebar a:active {
-    background-color: #7ec3f3;
-    transform: scale(1.02); /* Subtle scale effect on touch */
+.sidebar a:hover {
+    background-color: 	#7ec3f3;
 }
-
 .toggle-btn {
     position: fixed;
-    top: 15px;
-    left: 15px;
+    top: 0px;
+    left:-2px;
     background-color: #94ebef;
-    width: 48px; /* Larger button for touch */
-    height: 48px; /* Larger button for touch */
+    background-image: url('Arrowleft.png') no-repeat center;
+    background-size: cover;
+    width: 25px;
+    height: 25px;
+    /*color: white;*/
     border: none;
+    /*padding: 10px;*/
     cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    z-index: 20; /* Higher than sidebar */
-    border-radius: 50%; /* Make it circular */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 24px; /* Proper size for icon */
+    transition: left 0.3s;
+    z-index: 2;
+    transition-timing-function: ease-in-out;
+    border-radius: 20px;
+    margin-top: 10px;
 }
-
-.toggle-btn:active {
-    transform: scale(0.95); /* Feedback when pressed */
-}
-
 .main-content {
-    display: block;
-    padding: 30px;
-    text-align: center;
+    display:block;
+    padding: 50px;
+    text-align-last: center;
     color: #ffffff;
-    margin-top: 60px; /* Space for the toggle button */
-    transition: margin-left 0.3s ease-in-out;
 }
-
-/* When sidebar is open, shift content (on larger screens only) */
-@media (min-width: 768px) {
-    .main-content.shifted {
-        margin-left: 280px;
-    }
-}
-
 .dropdown-content {
+    display: grid;
+    overflow: hidden;
     display: none;
     opacity: 0;
     max-height: 0;
     overflow: hidden;
-    transition: opacity 0.3s ease-in-out, max-height 0.3s ease-in-out;
+    transition: opacity 0.3s ease-in-out,max-height 0.3s ease-in-out;
 }
-
 .dropdown-content a {
-    padding: 16px 20px 16px 40px; /* Larger touch target with indentation */
-    margin: 6px 8px 6px 16px; /* More space for nested items */
+    padding-left: 20px;
+    width: 200px;
     border-radius: 8px;
-    background-color: rgba(255, 255, 255, 0.05); /* Slight background to distinguish */
+    background-color: transparent;
     transition: all 0.2s ease-in-out;
-    font-size: 15px; /* Slightly smaller than parent */
 }
-
 .dropdown-content.show {
     display: block;
     opacity: 1;
-    max-height: 900px; /* Higher max height for longer lists */
-    transition: opacity 0.3s ease-in-out, max-height 0.5s ease-in-out;
+    max-height: 500px;
+    transform: translateY(0);
+    transition: transform 0.3s ease-in-out,opacity 0.3s ease-in-out;
 }
-
 .dropdown-btn {
     cursor: pointer;
     display: flex;
     color: #fff;
-    border-radius: 12px;
-    padding: 16px 20px; /* Larger touch target */
-    position: relative;
-    transition: background-color 0.2s ease;
-    font-size: 17px; /* Slightly larger than child items */
-    font-weight: 500;
-    margin: 6px 8px;
-}
+    border-radius:12px ;
+    width: 210px;
 
-/* Add arrow indicator for dropdown */
-.dropdown-btn:after {
-    content: '';
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 10px;
-    height: 10px;
-    border-right: 2px solid #fff;
-    border-bottom: 2px solid #fff;
-    transform: translateY(-50%) rotate(45deg);
-    transition: transform 0.3s ease;
 }
-
-/* Rotate arrow when dropdown is active */
-.dropdown.active .dropdown-btn:after {
-    transform: translateY(-50%) rotate(-135deg);
-}
-
-.dropdown-btn:hover,
-.dropdown-btn:active {
+.dropdown-btn:hover{
     color: #11101d;
-    background: rgba(255, 255, 255, 0.8);
+    background: #fff;
 }
-
-.dropdown-btn:active {
-    transform: scale(0.98); /* Subtle feedback when pressed */
-}
-
-.dropdown-content a:hover,
-.dropdown-content a:active {
-    background-color: rgba(126, 195, 243, 0.7);
-    transform: translateX(5px); /* Slight horizontal movement */
-}
-
-/* Make scrolling smooth for touch devices */
-.sidebar {
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-}
-
-/* Active states for touch feedback */
-.dropdown-btn.active {
-    background-color: rgba(255, 255, 255, 0.2);
-    color: #fff;
-}
-
-/* Overlay when sidebar is open (for mobile) */
-.sidebar-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 5;
-    display: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.sidebar-overlay.active {
+.dropdown-content a:hover{
     display: block;
-    opacity: 1;
+    padding: 20px;
+    margin-top: 5px;
+    text-decoration: none;
+    transition: transform 0.3s ease-in-out;
+    transform: translateY(-5px);
+    border-radius: 12px;
 }
 
-/* Media queries for responsiveness */
-@media (max-width: 767px) {
-    .sidebar {
-        width: 80%; /* Wider sidebar on small screens */
-        max-width: 300px;
-        left: -100%; /* Ensure it's fully off-screen */
-    }
-    
-    .main-content {
-        padding: 20px 15px;
-    }
-    
-    /* When sidebar open, ensure toggle button moves with it */
-    .toggle-btn.sidebar-open {
-        left: calc(80% - 24px);
-        max-left: 276px;
-    }
-}
-
-/* Add touch ripple effect */
-.ripple {
-    position: relative;
-    overflow: hidden;
-}
-
-.ripple:after {
-    content: "";
-    display: block;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
-    background-repeat: no-repeat;
-    background-position: 50%;
-    transform: scale(10, 10);
-    opacity: 0;
-    transition: transform .5s, opacity 1s;
-}
-
-.ripple:active:after {
-    transform: scale(0, 0);
-    opacity: .3;
-    transition: 0s;
-}

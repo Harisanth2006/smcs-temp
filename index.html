@@ -5,71 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Study Materials</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Add Material Icons for better touch-friendly icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!-- Add Poppins font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Improved touch-friendly toggle button -->
-    <button class="toggle-btn" id="toggle-btn" aria-label="Toggle Menu">
-        <span class="material-icons">menu</span>
-    </button>
-    
-    <!-- Sidebar with improved markup for accessibility -->
-    <nav class="sidebar" id="sidebar">
-        <div class="dropdown">
-            <a href="#" class="dropdown-btn" aria-expanded="false" aria-controls="btech">
-                B.Tech
-            </a>
-            <div class="dropdown-content" id="btech" role="menu">
-                <a href="csbs.html" role="menuitem">Computer Science And Business Studies</a>
-                <a href="aids.html" role="menuitem">Artificial Intelligence And Data Science</a>
-                <a href="petro_eng.html" role="menuitem">Petroleum Engineering</a>
-                <a href="petro_che.html" role="menuitem">Petrochemical Engineering</a>
-                <a href="foot_eng.html" role="menuitem">Foot Engineering</a>
-                <a href="btbce.html" role="menuitem">Bio Tech and Bio Chemical Engineering</a>
-            </div>
+    <button class="toggle-btn"id="toggle-btn" onclick="toggleSidebar()" style="background-image: url('Arrowright.png');"></button>
+   <!---- <input type="checkbox" style="appearance: none;">
+    <div class="toggle">
+        <span class="tline common"></span>
+        <span class="mline common"></span>
+        <span class="bline common"></span>
+    </div>--->
+<div class="sidebar" id="sidebar">
+    <div class="dropdown">
+        <a class="dropdown-btn" onclick="toggleDropdown('btech')">B.Tech</a>
+        <div class="dropdown-content" id="btech">
+            <a href="csbs.html">Computer Science And Business Studies</a>
+            <a href="aids.html">Artificial Intelligence And Data Science</a>
+            <a href="petro_eng.html">Petroleum Engineering</a>
+            <a href="petro_che.html">Petrochemical Engineering</a>
+            <a href="foot_eng.html">Foot Engineering</a>
+            <a href="btbce.html">Bio Tech and Bio Chemical Engineering</a>
         </div>
-        <div class="dropdown">
-            <a href="#" class="dropdown-btn" aria-expanded="false" aria-controls="be">
-                B.E
-            </a>
-            <div class="dropdown-content" id="be" role="menu">
-                <a href="civil_eng.html" role="menuitem">Civil Engineering</a>
-                <a href="eee.html" role="menuitem">Electrical and Electronic Engineering</a>
-                <a href="ece.html" role="menuitem">Electrical and Communication Engineering</a>
-                <a href="mech.html" role="menuitem">Mechanical Engineering</a>
-                <a href="cse.html" role="menuitem">Computer Science Engineering</a>
-            </div>
+    </div>
+    <div class="dropdown">
+        <a class="dropdown-btn" onclick="toggleDropdown('be')">B.E</a>
+        <div class="dropdown-content" id="be">
+            <a href="civil_eng.html">Civil Engineering</a>
+            <a href="eee.html">Electrical and Electronic Engineering</a>
+            <a href="ece.html">Electrical and Communication Engineering</a>
+            <a href="mech.html">Mechanical Engineering</a>
+            <a href="cse.html">Computer Science Engineering</a>
         </div>
-    </nav>
-    
-    <!-- Overlay for mobile devices when sidebar is open -->
-    <div class="sidebar-overlay"></div>
+    </div>
+</div>
 
-    <main class="main-content">
-        <h1>Welcome to Study Materials</h1>
-        <p>Select a subject from the sidebar to view study materials.</p>
-    </main>
+<div class="main-content">
+    <h1>Welcome to Study Materials</h1>
+    <p>Select a subject from the sidebar to view study materials.</p>
+</div>
 
-    <script src="script.js"></script>
-    <script>
-        // Add click event to toggle button
-        document.getElementById('toggle-btn').addEventListener('click', toggleSidebar);
-        
-        // Add click events to dropdown buttons
-        document.querySelectorAll('.dropdown-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const id = this.getAttribute('aria-controls');
-                toggleDropdown(id);
-                
-                // Update aria-expanded state
-                const isExpanded = this.getAttribute('aria-expanded') === 'true';
-                this.setAttribute('aria-expanded', !isExpanded);
-            });
-        });
-    </script>
+<script src="script.js"></script>
+
 </body>
 </html>
