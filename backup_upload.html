@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload PDF</title>
+</head>
+<body>
+  <div class="container">
+    <h1>Upload PDF (CSBS)</h1>
+    <form id="uploadForm">
+      <!-- Hidden original file input -->
+      <input type="file" id="fileInput" accept=".pdf,application/pdf" required style="display: none;" />
+      
+      <!-- Custom styled label that triggers the file input -->
+      <label for="fileInput" class="file-input-label">
+        <span class="file-icon">📄</span>
+        <span class="browse-text">Browse PDF</span>
+      </label>
+      
+      <!-- File name display -->
+      <div id="selectedFileName" class="selected-file">No file selected</div>
+      
+      <p id="uploadHint">Only PDF Files Accepted (.pdf)</p>
+      <button type="submit" id="submitButton" disabled>Upload PDF</button>
+    </form>
+    
+    <!-- Enhanced status container -->
+    <div id="statusContainer" class="status-container">
+      <div id="status" class="status-message"></div>
+      <div class="status-progress-container">
+        <div id="statusProgress" class="status-progress"></div>
+      </div>
+    </div>
+  </div>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #333;
+      background-size: cover;
+      background-position: center;
+      color: #fff;
+      font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: clamp(24px, 5vw, 32px);
+    }
+
+    #uploadForm {
+      position: relative;
+      background: linear-gradient(to bottom, #688fe5, #95e4e5);
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+      width: 100%;
+      max-width: 600px;
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #uploadHint {
+      color: #fff;
+      font-size: 16px;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    button {
+      background: #94ebef;
+      border: none;
+      outline: none;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+      cursor: pointer;
+      font-size: clamp(14px, 4vw, 16px);
+      width: 90%;
+      max-width: 400px;
+      padding: clamp(15px, 3vw, 25px);
+      margin-top: 20px;
+      color: #333;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+
+    button:hover:not([disabled]) {
+      background: #7ad7db;
+      box-shadow: 0 0 15px rgba(0, 0, 0, .2);
+    }
+    
+    button[disabled] {
+      background: #ccc;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    /* Material Design style for file input */
+    .file-input-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 90%;
+      max-width: 500px;
+      padding: clamp(10px, 3vw, 15px);
+      margin: 20px 0;
+      background: #94ebef;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      color: #333;
+      font-weight: 500;
+      transition: all 0.3s;
+      font-size: clamp(14px, 4vw, 18px);
+    }
+
+    .file-input-label:hover {
+      background: #7ad7db;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+    }
+
+    .file-input-label:active {
+      transform: translateY(1px);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    .file-icon {
+      font-size: clamp(18px, 5vw, 22px);
+      margin-right: 10px;
+    }
+
+    .selected-file {
+      margin: 10px 0;
+      color: #fff;
+      font-size: 14px;
+      text-align: center;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding: 0 15px;
+    }
+
+    /* Status message styling */
+    .status-container {
+      width: 100%;
+      max-width: 600px;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      opacity: 0;
+      visibility: hidden;
+      margin-top: 20px;
+    }
+
+    .status-container.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .status-message {
+      text-align: center;
+      font-size: clamp(14px, 4vw, 16px);
+      margin-bottom: 10px;
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .status-progress-container {
+      height: 5px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .status-progress {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(to right, #94ebef, #688fe5);
+      border-radius: 3px;
+      transition: width 0.5s ease-in-out;
+    }
+
+    /* Status types */
+    .status-success .status-message {
+      color: #94ebef;
+    }
+
+    .status-error .status-message {
+      color: #ff6b6b;
+    }
+
+    .status-info .status-message {
+      color: #ffcc5c;
+    }
+
+    /* Media Queries */
+    @media (max-width: 768px) {
+      #uploadForm {
+        padding: 15px;
+        min-height: 250px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 10px;
+      }
+      
+      button {
+        padding: 15px;
+      }
+      
+      .file-input-label {
+        padding: 12px;
+      }
+      
+      #uploadHint {
+        font-size: 14px;
+      }
+    }
+  </style>
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwYInTpoEngWMq-U8x_iRhAcmPG0C-mtcIGs79FjeYWIRFvoaANxkYEpWuqVoodTpKT/exec"; // Replace with your deployed Apps Script URL
+    const folderId = new URLSearchParams(window.location.search).get("folder");
+    const submitButton = document.getElementById("submitButton");
+
+    // Check if the file is a PDF
+    function isPDF(file) {
+      return file && 
+             (file.type === 'application/pdf' || 
+              file.name.toLowerCase().endsWith('.pdf'));
+    }
+
+    // Display the selected file name and validate
+    document.getElementById("fileInput").addEventListener("change", function() {
+      const selectedFileName = document.getElementById("selectedFileName");
+      const file = this.files[0];
+      
+      if (file) {
+        if (isPDF(file)) {
+          selectedFileName.textContent = file.name;
+          selectedFileName.style.color = "#fff";
+          submitButton.disabled = false;
+        } else {
+          selectedFileName.textContent = "Invalid file type. Please select a PDF file.";
+          selectedFileName.style.color = "#ff6b6b";
+          submitButton.disabled = true;
+          this.value = ''; // Clear the file input
+        }
+      } else {
+        selectedFileName.textContent = "No file selected";
+        selectedFileName.style.color = "#fff";
+        submitButton.disabled = true;
+      }
+    });
+
+    // Function to show status messages
+    function showStatus(message, type = 'info', progress = 100) {
+      const statusContainer = document.getElementById("statusContainer");
+      const statusElement = document.getElementById("status");
+      const progressElement = document.getElementById("statusProgress");
+      
+      // Set message
+      statusElement.textContent = message;
+      
+      // Set progress
+      progressElement.style.width = `${progress}%`;
+      
+      // Remove existing status classes
+      statusContainer.classList.remove('status-success', 'status-error', 'status-info');
+      
+      // Add appropriate class
+      statusContainer.classList.add(`status-${type}`);
+      
+      // Show container
+      statusContainer.classList.add('active');
+      
+      // For success and error messages, hide after 5 seconds
+      if (type === 'success' || type === 'error') {
+        setTimeout(() => {
+          statusContainer.classList.remove('active');
+        }, 5000);
+      }
+    }
+
+    document.getElementById("uploadForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const file = document.getElementById("fileInput").files[0];
+      if (!file) {
+        showStatus("Please select a PDF file.", "error");
+        return;
+      }
+      
+      // Double-check that it's a PDF
+      if (!isPDF(file)) {
+        showStatus("Only PDF files are accepted.", "error");
+        return;
+      }
+
+      if (!folderId) {
+        showStatus("Missing folder ID.", "error");
+        return;
+      }
+
+      // Show uploading status
+      showStatus("Preparing to upload PDF file...", "info", 15);
+      
+      const reader = new FileReader();
+      reader.onload = async function () {
+        showStatus("Reading PDF file and preparing data...", "info", 30);
+        
+        const base64String = reader.result.split(",")[1];
+
+        const formData = new URLSearchParams();
+        formData.append("folder", folderId);
+        formData.append("filename", file.name);
+        formData.append("mimeType", file.type);
+        formData.append("base64", base64String);
+
+        try {
+          showStatus("Uploading PDF to server...", "info", 60);
+          
+          const response = await fetch(scriptURL, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: formData.toString(),
+          });
+          
+          showStatus("Processing response...", "info", 90);
+          
+          const text = await response.text();
+          
+          if (text.toLowerCase().includes("success") || response.ok) {
+            showStatus(text, "success", 100);
+            // Reset form after successful upload
+            document.getElementById("fileInput").value = '';
+            document.getElementById("selectedFileName").textContent = "No file selected";
+            submitButton.disabled = true;
+          } else {
+            showStatus(text, "error", 100);
+          }
+        } catch (err) {
+          showStatus("Upload failed: " + err.message, "error", 100);
+        }
+      };
+      
+      reader.onprogress = function(event) {
+        if (event.lengthComputable) {
+          const percentLoaded = Math.round((event.loaded / event.total) * 25); // Max 25% for file reading
+          showStatus("Reading PDF file...", "info", percentLoaded);
+        }
+      };
+      
+      reader.readAsDataURL(file);
+    });
+    
+    // Prevent drag and drop of non-PDF files
+    ['dragenter', 'dragover', 'drop'].forEach(eventName => {
+      document.body.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }, false);
+    });
+    
+    document.body.addEventListener('drop', (e) => {
+      const files = e.dataTransfer.files;
+      if (files.length) {
+        const file = files[0];
+        if (isPDF(file)) {
+          document.getElementById('fileInput').files = files;
+          // Trigger the change event
+          const event = new Event('change');
+          document.getElementById('fileInput').dispatchEvent(event);
+        } else {
+          showStatus("Only PDF files are accepted.", "error");
+        }
+      }
+    }, false);
+  </script>
+</body>
+</html>
